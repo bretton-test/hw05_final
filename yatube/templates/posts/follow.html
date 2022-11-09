@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    Подписки пользователя {{ user.username }}
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <h1>Последние обновления в моей подписке</h1>
+        {% if not page_obj %}
+        <div class="mb-5">
+            <a href="{% url 'posts:index' %}" class="btn btn-link">
+                Нет подписок. Но всегда можно почитать на главной
+            </a>
+        </div>
+        {% endif %}
+        {% for post in page_obj %}
+            {% include 'includes/post.html' %}
+            {% if not forloop.last %}
+                <hr>{% endif %}
+        {% endfor %}
+
+        {% include 'posts/includes/paginator.html' %}
+
+    </div>
+{% endblock %}

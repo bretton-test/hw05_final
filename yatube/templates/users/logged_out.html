@@ -1,0 +1,16 @@
+{% extends 'users/base_done.html' %}
+{% block title %}Вы вышли из системы{% endblock %}
+
+{% block card-header %}
+    Выход
+{% endblock card-header %}
+
+{% block label %}
+    Вы вышли из своей учётной записи. Ждём вас снова!
+{% endblock label %}
+
+{% block button %}
+    <a href="{% url 'posts:index' %}" class="btn btn-link">
+        На главную
+    </a>
+{% endblock button %}

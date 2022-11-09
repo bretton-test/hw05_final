@@ -1,0 +1,33 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: lightskyblue">
+    <div class="container-xl">
+        <a class="navbar-brand" href="{% url 'posts:index' %}">
+            <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+            <span style="color:red">Ya</span>tube
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07XL" aria-controls="navbarsExample07XL" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExample07XL">
+
+            {% with request.resolver_match.view_name as view_name %}
+                {% for item,menu_url in menu.items %}
+                    <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name  == menu_url %}active{% endif %}"
+                           href="{% url menu_url %}">{{item}}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% if request.user.is_authenticated %}
+                <li>
+                    <div class="col-md-3 text-end">
+                        Пользователь: {{ request.user.username }}
+                    </div>
+                </li>
+            {% endif %}
+            </ul>
+            {% endwith %}
+        </div>
+    </div>
+</nav>

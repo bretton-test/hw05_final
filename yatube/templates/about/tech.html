@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+    {% comment %} Колонки с отступом сверху и снизу {% endcomment %}
+    <div class="row">
+        <h1>Вот что я изучаю</h1>
+        {% comment %}
+            Боковой блок со списком технологий
+            Займет всю ширину блока на мобильном
+            и 25% при размерах экрана ≥768px
+        {% endcomment %}
+        <aside class="col-12 col-md-3">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    Python
+                </li>
+                <li class="list-group-item">
+                    Django
+                </li>
+                <li class="list-group-item">
+                    HTML / CSS
+                </li>
+            </ul>
+        </aside>
+        {% comment %}
+            Статья
+            Займет всю ширину блока на мобильном
+            и 75% при размерах экрана ≥768px
+        {% endcomment %}
+        <article class="col-12 col-md-9">
+
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <img
+                            alt=""
+                            class="image-2"
+                            src="https://static.overlay-tech.com/assets/cc79b682-d93a-422f-a578-9ec0c881ede0.svg"
+                    />
+                    <h2 class="fw-normal">Python 3.7</h2>
+                    <p>Python is a programming language that lets you work more quickly and integrate your systems more effectively.</p>
+                    <p><a class="btn btn-secondary" href="https://docs.python.org/3.7/">View details &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <img
+                            alt=""
+                            class="image-2"
+                            src="https://static.overlay-tech.com/assets/8c3d89f5-9f48-421a-9194-9e839d7fcbb0.svg"
+                    />
+                    <h2 class="fw-normal">Django 2.2.9</h2>
+                    <p>Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design.</p>
+                    <p><a class="btn btn-secondary" href="https://docs.djangoproject.com/en/4.1/">View details &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <img
+                            alt=""
+                            class="image-2"
+                            src="https://static.overlay-tech.com/assets/64812791-ac0b-4be7-9346-899b788be04b.svg"
+                    />
+                    <h2 class="fw-normal">HTML / CSS</h2>
+                    <p>HTML is the standard markup language for Web pages. With HTML you can create your own Website. HTML is easy to learn - You will enjoy it!</p>
+                    <p><a class="btn btn-secondary" href="https://www.w3schools.com/html/">View details &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+            </div><!-- /.row -->
+
+        </article>
+    </div>
+{% endblock %}
