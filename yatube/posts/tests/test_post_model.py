@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 
 from .fixtures import get_objects_instances_to_test, PostTest
 
