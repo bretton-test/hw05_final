@@ -6,6 +6,7 @@ from .fixtures import (
     get_objects_instances_to_test,
     get_views_list,
     image,
+    small_gif,
 )
 from ..forms import PostForm
 from ..models import Group, Post, Comment
@@ -30,24 +31,26 @@ class PostFormTests(PostTest):
         self.get_client()
 
     def last_post_test(self, post_id, post_text, post_author, post_group):
-        """Test created or edited post"""
+        """Test created or edited post
+        Все картинки подбираются родительским классом.
+        В папочках как в больнице. тишь да гладь"""
         last_post = Post.objects.first()
         self.assertEqual(last_post.id, post_id)
         self.assertEqual(last_post.text, post_text)
         self.assertEqual(last_post.group, post_group)
         self.assertEqual(last_post.author, post_author)
+        self.assertIsNotNone(last_post.image)
+        self.assertEqual(last_post.image.read(), small_gif)
 
     def last_comment_test(
         self,
         last_comment,
-        comment_id,
         comment_text,
         comment_author,
         comment_post,
     ):
         """Test created comment"""
 
-        self.assertEqual(last_comment.id, comment_id)
         self.assertEqual(last_comment.text, comment_text)
         self.assertEqual(last_comment.author, comment_author)
         self.assertEqual(last_comment.post, comment_post)
@@ -74,11 +77,11 @@ class PostFormTests(PostTest):
 
     def test_create_post(self):
         """Valid Post_form creates a new Post."""
-
+        my_image = image('my_image.gif')
         data = {
             'text': TEXT_FOR_POST,
             'group': self.group.slug,
-            'image': image('my_image.gif'),
+            'image': my_image,
         }
         post_count = Post.objects.count()
         response = self.authorized_client.post(
@@ -94,10 +97,11 @@ class PostFormTests(PostTest):
 
     def test_edit_existing_post(self):
         """Valid Post_form edits and saves an existing post"""
+        my_image = image('my_image1.gif')
         data = {
             'text': TEXT_FOR_POST,
             'group': self.group_two.slug,
-            'image': image('my_image1.gif'),
+            'image': my_image,
         }
         post_count = Post.objects.count()
         response = self.authorized_client.post(
@@ -109,10 +113,7 @@ class PostFormTests(PostTest):
         self.assertRedirects(response, self.page_url['post_page'])
         self.assertEqual(Post.objects.count(), post_count)
         self.last_post_test(
-            self.post.id,
-            TEXT_FOR_POST,
-            self.user,
-            self.group_two,
+            self.post.id, TEXT_FOR_POST, self.user, self.group_two
         )
 
     def test_add_comment_to_existing_post(self):
@@ -124,10 +125,9 @@ class PostFormTests(PostTest):
         )
         self.assertRedirects(response, self.page_url['post_page'])
         self.assertEqual(self.post.comments.count(), comments_count + 1)
-        new_comment_id = Comment.objects.aggregate(Max("id")).get('id__max')
+
         self.last_comment_test(
             Comment.objects.first(),
-            new_comment_id,
             TEXT_FOR_COMMENT,
             self.user,
             self.post,
@@ -135,7 +135,6 @@ class PostFormTests(PostTest):
 
         self.last_comment_test(
             response.context["comments"][0],
-            new_comment_id,
             TEXT_FOR_COMMENT,
             self.user,
             self.post,

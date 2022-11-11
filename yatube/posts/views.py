@@ -28,9 +28,8 @@ def group_list(request, slug):
 def profile(request, username):
     """view profile information"""
     author = get_object_or_404(User, username=username)
-
     following = (
-        author.following.filter(user_id=request.user.id).count() > 0
+        author.following.filter(user_id=request.user.id).exists()
         if request.user.is_authenticated
         else False
     )
@@ -104,10 +103,12 @@ def add_comment(request, post_id):
 
 @login_required
 def follow_index(request):
-
+    """Сколько же времени похоронено здесь.
+    Писать запросы с хвоста - особый путь"""
     queryset = Post.objects.select_related('author', 'group').filter(
-        author_id__in=request.user.follower.values('author_id')
+        author__following__user=request.user
     )
+
     template = 'posts/follow.html'
     context = {}
 
@@ -122,7 +123,7 @@ def profile_follow(request, username):
 
     if (
         request.user != author
-        and author.following.filter(user_id=request.user.id).count() == 0
+        and not author.following.filter(user_id=request.user.id).exists()
     ):
         Follow.objects.create(user=request.user, author=author)
 
@@ -134,6 +135,8 @@ def profile_unfollow(request, username):
     """# Дизлайк, отписка"""
     author = get_object_or_404(User, username=username)
     if request.user != author:
-        author.following.filter(user_id=request.user.id).delete()
+        following = author.following.filter(user_id=request.user.id)
+        if following.exists():
+            following.delete()
 
     return redirect('posts:profile', username)
