@@ -77,11 +77,10 @@ class PostFormTests(PostTest):
 
     def test_create_post(self):
         """Valid Post_form creates a new Post."""
-        my_image = image('my_image.gif')
         data = {
             'text': TEXT_FOR_POST,
             'group': self.group.slug,
-            'image': my_image,
+            'image': image('my_image.gif'),
         }
         post_count = Post.objects.count()
         response = self.authorized_client.post(
@@ -97,11 +96,10 @@ class PostFormTests(PostTest):
 
     def test_edit_existing_post(self):
         """Valid Post_form edits and saves an existing post"""
-        my_image = image('my_image1.gif')
         data = {
             'text': TEXT_FOR_POST,
             'group': self.group_two.slug,
-            'image': my_image,
+            'image': image('my_image1.gif'),
         }
         post_count = Post.objects.count()
         response = self.authorized_client.post(
